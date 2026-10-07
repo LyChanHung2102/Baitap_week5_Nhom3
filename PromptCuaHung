@@ -1,0 +1,18 @@
+prompt 1: Tạo form đăng nhập đăng ký
+Hãy đóng vai thành một senior thiết kế website thiết kế giúp tôi một trang đăng ký/đăng nhập vào trang Hung.html. 
+Có thiết kế css luôn giúp tôi và làm ở branch "Code_cua_hung" nhé
+
+prompt 2: Hoạt động 1 thêm hover vào button
+Hãy viết mã CSS transition cho một button sao cho khi hover nó sẽ nâng
+lên 3px, thêm box-shadow đậm hơn, và sử dụng hàm timing 'cubic-bezier' để chuyển
+động trông tự nhiên hơn. Hãy note lại khi bạn thêm dòng css này vào cho tôi nhé
+
+prompt 3: Hoạt động 2 thêm vòng tròn xoay 360 khi loading
+Tạo một vòng tròn loading bằng CSS sử dụng animation xoay 360 độ vô
+hạn. Sử dụng border-top-color khác với các phần còn lại để tạo 
+hiệu ứng xoay sau khi tôi đăng nhập hoặc đăng ký vào nhé
+
+prompt 4: thêm toast notification để có hiệu ứng sau khi loading
+Thêm giúp tôi .toast khi đăng nhập thành công để có hiệu ứng đẹp nhé
+
+
