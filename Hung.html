@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập & Đăng ký</title>
+    <!-- Thư viện AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #357abd;
+            --secondary-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --light-text: #7f8c8d;
+            --error-color: #e74c3c;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            /* Update layout để có thể cuộn (scroll) và xem AOS */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .demo-section {
+            min-height: 50vh;
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            margin: 50px 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: var(--text-color);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            width: 400px;
+            max-width: 90%;
+            position: relative;
+        }
+
+        .form-container {
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: var(--text-color);
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            color: var(--light-text);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            /* Update: Sử dụng cubic-bezier cho chuyển động mượt mà và tự nhiên hơn */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            /* Update: Nâng nút lên 3px và thêm bóng đổ (box-shadow) đậm hơn khi hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--light-text);
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle styles */
+        .register-form {
+            display: none;
+        }
+
+        .active-form {
+            display: block;
+        }
+
+        .social-login {
+            margin-top: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .social-login p {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            background: white;
+            display: inline-block;
+            padding: 0 10px;
+            position: relative;
+            top: -30px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background: white;
+            color: var(--text-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .social-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* --- Update: CSS cho loading spinner --- */
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            /* Border-top khác màu để tạo hiệu ứng xoay */
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Update: CSS cho Toast notification --- */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px; /* Cố định vị trí ngay từ đầu */
+            transform: translateX(150%); /* Ẩn ngoài màn hình bằng transform để tối ưu hiệu năng GPU */
+            background-color: #2ecc71; /* Màu xanh lá cho thành công */
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 16px rgba(46, 204, 113, 0.3);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Thay thế transition right thành transform giúp loại bỏ giật lag trên mobile */
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0); /* Trượt vào vị trí gốc */
+        }
+        
+        .toast-icon {
+            font-size: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Section chính bọc form đăng nhập, có hiệu ứng zoom-in khi load -->
+    <section class="hero-section" data-aos="zoom-in" data-aos-duration="1000">
+        <div class="container">
+        <!-- Form Đăng nhập -->
+        <div id="loginForm" class="form-container active-form">
+            <div class="form-header">
+                <h2>Đăng nhập</h2>
+                <p>Chào mừng bạn quay trở lại</p>
+            </div>
+            <form action="#" method="POST">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Nhập email của bạn" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Mật khẩu</label>
+                    <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
+                </div>
+                <button type="submit" class="btn">Đăng nhập</button>
+            </form>
+            
+            <div class="form-footer">
+                <p>Chưa có tài khoản? <a href="#" onclick="toggleForm()">Đăng ký ngay</a></p>
+            </div>
+        </div>
+
+        <!-- Form Đăng ký -->
+        <div id="registerForm" class="form-container register-form">
+            <div class="form-header">
+                <h2>Tạo tài khoản</h2>
+                <p>Tham gia với chúng tôi ngay hôm nay</p>
+            </div>
+            <form action="#" method="POST">
+                <div class="input-group">
+                    <label for="reg-name">Họ và tên</label>
+                    <input type="text" id="reg-name" placeholder="Nhập họ và tên" required>
+                </div>
+                <div class="input-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" placeholder="Nhập email của bạn" required>
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">Mật khẩu</label>
+                    <input type="password" id="reg-password" placeholder="Tạo mật khẩu" required>
+                </div>
+                <button type="submit" class="btn">Đăng ký</button>
+            </form>
+            
+            <div class="form-footer">
+                <p>Đã có tài khoản? <a href="#" onclick="toggleForm()">Đăng nhập</a></p>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Các section demo để kiểm tra hiệu ứng cuộn AOS -->
+    <section class="demo-section" data-aos="fade-up">
+        <h2>Section 1: Fade Up</h2>
+        <p>Cuộn xuống để thấy hiệu ứng mượt mà!</p>
+    </section>
+
+    <section class="demo-section" data-aos="fade-right" data-aos-delay="200">
+        <h2>Section 2: Fade Right (delay 200ms)</h2>
+    </section>
+
+    <section class="demo-section" data-aos="flip-left" data-aos-duration="1000">
+        <h2>Section 3: Flip Left (1s duration)</h2>
+    </section>
+    <!-- Update: HTML cho loading spinner -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Update: HTML cho Toast -->
+    <div class="toast" id="successToast">
+        <div class="toast-icon">✓</div>
+        <span id="toastMessage">Đăng nhập thành công!</span>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            if (loginForm.classList.contains('active-form')) {
+                loginForm.classList.remove('active-form');
+                loginForm.style.display = 'none';
+                
+                registerForm.classList.add('active-form');
+                registerForm.style.display = 'block';
+            } else {
+                registerForm.classList.remove('active-form');
+                registerForm.style.display = 'none';
+                
+                loginForm.classList.add('active-form');
+                loginForm.style.display = 'block';
+            }
+        }
+
+        // Hàm hiển thị Toast
+        function showToast(message) {
+            const toast = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update: Bắt sự kiện submit của form để hiện loading spinner và sau đó hiện toast
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Chặn hành vi submit mặc định
+                
+                // Lấy nút submit để biết là form Đăng nhập hay Đăng ký
+                const submitBtnText = form.querySelector('button[type="submit"]').textContent;
+                
+                const loaderOverlay = document.getElementById('loaderOverlay');
+                loaderOverlay.style.display = 'flex'; // Hiển thị spinner
+                
+                // Giả lập thời gian chờ 2 giây sau đó ẩn spinner và hiện toast
+                setTimeout(() => {
+                    loaderOverlay.style.display = 'none';
+                    showToast(submitBtnText + ' thành công!');
+                }, 2000);
+            });
+        });
+    </script>
+    
+    <!-- Update: Thư viện AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Khởi tạo AOS
+        AOS.init({
+            once: true, // Hiệu ứng chỉ chạy 1 lần khi cuộn tới
+            offset: 100 // Khoảng cách (px) từ phần tử tới cuối màn hình để bắt đầu hiệu ứng
+        });
+    </script>
+</body>
+</html>
